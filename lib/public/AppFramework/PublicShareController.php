@@ -28,6 +28,18 @@ use OCP\Files\NotFoundException;
 use OCP\IRequest;
 use OCP\ISession;
 
+/**
+ * Base controller for public shares
+ *
+ * It will verify if the user is properly authenticated to the share. If not a 404
+ * is thrown by the PublicShareMiddleware.
+ *
+ * Use this for example for a controller that is not to be called via a webbrowser
+ * directly. For example a PublicPreviewController. As this is not meant to be
+ * called by a user direclty.
+ *
+ * To show an auth page extend the AuthPublicShareController
+ */
 abstract class PublicShareController extends Controller {
 
 	/** @var ISession */

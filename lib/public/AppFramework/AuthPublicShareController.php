@@ -31,6 +31,15 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 
+/**
+ * Base controller for interactive public shares
+ *
+ * It will verify if the user is properly authenticated to the share. If not the
+ * user will be redirected to an authentication page.
+ *
+ * Use this for a controller that is to be called directly by a user. So the
+ * normal public share page for files/calendars etc.
+ */
 abstract class AuthPublicShareController extends PublicShareController {
 
 	/** @var IURLGenerator */
