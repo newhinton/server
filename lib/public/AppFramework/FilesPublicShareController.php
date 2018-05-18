@@ -30,7 +30,7 @@ use OCP\IURLGenerator;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager as ShareManager;
 
-abstract class FilesPublicShareController extends PublicShareController {
+abstract class FilesPublicShareController extends AuthPublicShareController {
 
 	/** @var ShareManager */
 	protected $shareManager;
@@ -85,5 +85,15 @@ abstract class FilesPublicShareController extends PublicShareController {
 		return $share->getPassword() !== null;
 	}
 
+	protected function postSuccessfullAuthenticate(string $token) {
+		try {
+			$share = $this->shareManager->getShareByToken($token);
+		} catch (ShareNotFound $e) {
+			return;
+		}
+
+		// For share this was always set so it is still used in other apps
+		$this->session->set('public_link_authenticated', (string)$share->getId());
+	}
 
 }
