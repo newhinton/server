@@ -108,10 +108,10 @@ $this->create('spreed.pagecontroller.showCall', '/call/{token}')->action(functio
 });
 
 // Sharing routes
-$this->create('files_sharing.sharecontroller.showShare', '/s/{token}')->action(function($urlParams) {
+$this->create('files_sharing.sharecontroller.show', '/s/{token}')->action(function($urlParams) {
 	if (class_exists(\OCA\Files_Sharing\AppInfo\Application::class, false)) {
 		$app = new \OCA\Files_Sharing\AppInfo\Application($urlParams);
-		$app->dispatch('ShareController', 'showShare');
+		$app->dispatch('ShareController', 'show');
 	} else {
 		throw new \OC\HintException('App file sharing is not enabled');
 	}
@@ -132,10 +132,10 @@ $this->create('files_sharing.sharecontroller.showAuthenticate', '/s/{token}/auth
 		throw new \OC\HintException('App file sharing is not enabled');
 	}
 });
-$this->create('files_sharing.sharecontroller.downloadShare', '/s/{token}/download')->get()->action(function($urlParams) {
+$this->create('files_sharing.sharecontroller.download', '/s/{token}/download')->get()->action(function($urlParams) {
 	if (class_exists(\OCA\Files_Sharing\AppInfo\Application::class, false)) {
 		$app = new \OCA\Files_Sharing\AppInfo\Application($urlParams);
-		$app->dispatch('ShareController', 'downloadShare');
+		$app->dispatch('ShareController', 'download');
 	} else {
 		throw new \OC\HintException('App file sharing is not enabled');
 	}
