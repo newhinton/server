@@ -3,6 +3,7 @@
 namespace OC\AppFramework\Middleware\PublicShare;
 
 use OC\AppFramework\Middleware\PublicShare\Exceptions\NeedAuthenticationException;
+use OCP\AppFramework\AuthPublicShareController;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Middleware;
@@ -44,9 +45,13 @@ class PublicShareMiddleware extends Middleware {
 			return;
 		}
 
-		// We need to authenticate
-		$this->session->set('public_link_authenticate_redirect', json_encode($this->request->getParams()));
-		throw new NeedAuthenticationException();
+		// If we can authenticate to this controller do it else we throw a 404 to not leak any info
+		if ($controller instanceof AuthPublicShareController) {
+			$this->session->set('public_link_authenticate_redirect', json_encode($this->request->getParams()));
+			throw new NeedAuthenticationException();
+		}
+
+		throw new NotFoundException();
 
 	}
 
