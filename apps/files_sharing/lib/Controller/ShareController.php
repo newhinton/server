@@ -336,7 +336,7 @@ class ShareController extends FilesPublicShareController {
 		$ogPreview = '';
 		if ($shareTmpl['previewSupported']) {
 			$shareTmpl['previewImage'] = $this->urlGenerator->linkToRouteAbsolute( 'files_sharing.PublicPreview.getPreview',
-				['x' => 200, 'y' => 200, 'file' => $shareTmpl['directory_path'], 't' => $shareTmpl['dirToken']]);
+				['x' => 200, 'y' => 200, 'file' => $shareTmpl['directory_path'], 'token' => $shareTmpl['dirToken']]);
 			$ogPreview = $shareTmpl['previewImage'];
 
 			// We just have direct previews for image files
@@ -348,7 +348,7 @@ class ShareController extends FilesPublicShareController {
 				//Whatapp is kind of picky about their size requirements
 				if ($this->request->isUserAgent(['/^WhatsApp/'])) {
 					$ogPreview = $this->urlGenerator->linkToRouteAbsolute('files_sharing.PublicPreview.getPreview', [
-						't' => $token,
+						'token' => $token,
 						'x' => 256,
 						'y' => 256,
 						'a' => true,
