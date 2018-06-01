@@ -271,6 +271,7 @@ class PublicKeyTokenProvider implements IProvider {
 			$defaultToken->getRemember()
 		);
 
+		$pkToken->setExpires($defaultToken->getExpires());
 		$pkToken->setId($defaultToken->getId());
 
 		return $this->mapper->update($pkToken);
