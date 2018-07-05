@@ -67,11 +67,13 @@
 			this.$currentContent = null;
 			this._setupEvents();
 
-			var scope=this;
+			var scope = this;
 			$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/get/SortingStrategy"), function (data, status) {
-				scope.$sortingStrategy=data;
+				scope.$sortingStrategy = data;
+				document.getElementById("sortingstrategy").value = data;
 				scope.setInitialQuickaccessSettings();
 			});
+
 
 		},
 
@@ -79,7 +81,7 @@
 		 * Setup UI events
 		 */
 		_setupEvents: function () {
-			this.$el.on('click', 'li a', _.bind(this._onClickItem, this))
+			this.$el.on('click', 'li a', _.bind(this._onClickItem, this));
 			this.$el.on('click', 'li button', _.bind(this._onClickMenuButton, this));
 			this._setOnDrag();
 
@@ -169,64 +171,58 @@
 			var scope = this;
 			var element = $("#sublist-favorites");
 			$(function () {
-				if (document.getElementById(scope.$quickAccessListKey.toString()).hasAttribute("draggable")) {
-					element.sortable({
-						axis: "y",
-						containment: "parent",
-						scroll: false,
-						zIndex: 0,
-						opacity: 0.5,
-						tolerance: "pointer",
-						//revert: 0.05,
-						//delay: 150,
-						start: function (event, ui) {
-							//Fix for offset
-							ui.helper[0].style.left = '0px';
+				element.sortable({
+					axis: "y",
+					containment: "parent",
+					scroll: false,
+					zIndex: 0,
+					opacity: 0.5,
+					tolerance: "pointer",
+					//revert: 0.05,
+					//delay: 150,
+					start: function (event, ui) {
+						//Fix for offset
+						ui.helper[0].style.left = '0px';
 
-							//Change Icon while dragging
-							var list = document.getElementById(scope.$quickAccessListKey).getElementsByTagName('li');
-							for (var j = 0; j < list.length; j++) {
-								if (!(typeof list[j].getElementsByTagName('a')[0] === 'undefined')) {
-									list[j].getElementsByTagName('a')[0].classList.remove("nav-icon-files");
-									list[j].getElementsByTagName('a')[0].classList.add('icon-menu');
-								}
+						//Change Icon while dragging
+						var list = document.getElementById(scope.$quickAccessListKey).getElementsByTagName('li');
+						for (var j = 0; j < list.length; j++) {
+							if (!(typeof list[j].getElementsByTagName('a')[0] === 'undefined')) {
+								list[j].getElementsByTagName('a')[0].classList.remove("nav-icon-files");
+								list[j].getElementsByTagName('a')[0].classList.add('icon-menu');
 							}
-						},
-						stop: function (event, ui) {
-							//Clean up offset
-							ui.item.removeAttr("style");
-
-							//Change Icon back after dragging
-							var list = document.getElementById(scope.$quickAccessListKey.toString()).getElementsByTagName('li');
-							for (var j = 0; j < list.length; j++) {
-								if (!(typeof list[j].getElementsByTagName('a')[0] === 'undefined')) {
-									list[j].getElementsByTagName('a')[0].classList.add("nav-icon-files");
-									list[j].getElementsByTagName('a')[0].classList.remove('icon-menu');
-								}
-							}
-						},
-						update: function (event, ui) {
-							var list = document.getElementById(scope.$quickAccessListKey.toString()).getElementsByTagName('li');
-							var string = [];
-							for (var j = 0; j < list.length; j++) {
-								var Object = {
-									id: j,
-									name: scope.getCompareValue(list, j, 'alphabet')
-								};
-								string.push(Object);
-							}
-							var resultorder = JSON.stringify(string);
-							$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/set/CustomSortingOrder"), {
-								order: resultorder
-							}, function (data, status) {
-							});
 						}
-					});
-				} else {
-					if (scope.$sortingStrategy === 'customorder') {
-						scope.$sortingStrategy = 'datemodified';
+					},
+					stop: function (event, ui) {
+						//Clean up offset
+						ui.item.removeAttr("style");
+
+						//Change Icon back after dragging
+						var list = document.getElementById(scope.$quickAccessListKey.toString()).getElementsByTagName('li');
+						for (var j = 0; j < list.length; j++) {
+							if (!(typeof list[j].getElementsByTagName('a')[0] === 'undefined')) {
+								list[j].getElementsByTagName('a')[0].classList.add("nav-icon-files");
+								list[j].getElementsByTagName('a')[0].classList.remove('icon-menu');
+							}
+						}
+					},
+					update: function (event, ui) {
+						var list = document.getElementById(scope.$quickAccessListKey.toString()).getElementsByTagName('li');
+						var string = [];
+						for (var j = 0; j < list.length; j++) {
+							var Object = {
+								id: j,
+								name: scope.getCompareValue(list, j, 'alphabet')
+							};
+							string.push(Object);
+						}
+						var resultorder = JSON.stringify(string);
+						$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/set/CustomSortingOrder"), {
+							order: resultorder
+						}, function (data, status) {
+						});
 					}
-				}
+				});
 			});
 		},
 
@@ -276,14 +272,32 @@
 
 			var quickAccesKey = this.$quickAccessListKey;
 			var list = document.getElementById(quickAccesKey).getElementsByTagName('li');
+			var strategyDropDownMenu = document.getElementById("sortingstrategy");
+			var sortablelist = $("#sublist-favorites");
+			var scope = this;
+
+			if (strategyDropDownMenu.value !== "customorder") {
+				sortablelist.sortable({disabled: true});
+			}
+
+			strategyDropDownMenu.addEventListener("change", function () {
+				scope.$sortingStrategy = strategyDropDownMenu.value;
+				if (strategyDropDownMenu.value === "customorder") {
+					sortablelist.sortable({disabled: false});
+				} else {
+					sortablelist.sortable({disabled: true});
+
+				}
+				$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/set/SortingStrategy"), {strategy: scope.$sortingStrategy}, function (data, status) {
+					console.log("store strategy: " + status);
+					scope.QuickSort(list, 0, list.length - 1);
+				});
+			});
 
 			var sort = true;
-			var reverse = false;
 			if (this.$sortingStrategy === 'datemodified') {
 				sort = false;
-				reverse = false;
 
-				var scope = this;
 				$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/get/FavoriteFolders/"), function (data, status) {
 					for (var i = 0; i < data.favoriteFolders.length; i++) {
 						for (var j = 0; j < list.length; j++) {
@@ -301,7 +315,6 @@
 			} else if (this.$sortingStrategy === 'date') {
 				sort = true;
 			} else if (this.$sortingStrategy === 'customorder') {
-				var scope = this;
 				$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/get/CustomSortingOrder"), function (data, status) {
 					var ordering = JSON.parse(data);
 					for (var i = 0; i < ordering.length; i++) {
@@ -319,9 +332,7 @@
 			if (sort) {
 				this.QuickSort(list, 0, list.length - 1);
 			}
-			if (reverse) {
-				this.reverse(list);
-			}
+
 
 		},
 

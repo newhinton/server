@@ -42,10 +42,22 @@
 					   checked="checked" type="checkbox">
 				<label for="showhiddenfilesToggle"><?php p($l->t('Show hidden files')); ?></label>
 			</div>
+
+			<div id="files-setting-sorting">
+				<label for="sortingstrategy"><?php p($l->t('Sorting-Strategy')); ?></label><br>
+				<select id="sortingstrategy" name="sortingstrategy">
+					<option value="alphabet"><?php p($l->t('Alphabet (Default)')); ?></option>
+					<option value="alphabet"><?php p($l->t('Alphabet')); ?></option>
+					<option value="customorder"><?php p($l->t('Custom Order')); ?></option>
+					<option value="datemodified"><?php p($l->t('Date Modified')); ?></option>
+				</select>
+			</div>
+
 			<label for="webdavurl"><?php p($l->t('WebDAV')); ?></label>
 			<input id="webdavurl" type="text" readonly="readonly"
 				   value="<?php p(\OCP\Util::linkToRemote('webdav')); ?>"/>
 			<em><?php print_unescaped($l->t('Use this address to <a href="%s" target="_blank" rel="noreferrer noopener">access your Files via WebDAV</a>', array(link_to_docs('user-webdav')))); ?></em>
+
 		</div>
 	</div>
 
