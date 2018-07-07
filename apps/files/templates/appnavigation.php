@@ -17,16 +17,18 @@
 			<a href="#" class="icon-quota svg">
 				<p id="quotatext"><?php
 					if ($_['quota'] !== \OCP\Files\FileInfo::SPACE_UNLIMITED) {
-						if($_['usage_blocked'] > 0){
-							p($l->t('%s of %s. %s%% are blocked!', [$_['usage'], $_['total_space'], $_['usage_blocked']]));
+						if($_['usage_blocked_relative'] > 0){
+							p($l->t('%s of %s. %s%% are blocked!', [$_['usage'], $_['total_space'], $_['usage_blocked_relative']]));
 						}else{
 							p($l->t('%s of %s', [$_['usage'], $_['total_space']]));
 						}
+
 					} else {
 						p($l->t('%s used', [$_['usage']]));
 					} ?></p>
-				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="<?php p($_['usage_blocked']) ?>"></div>
+				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="<?php p($_['usage_blocked_relative']) ?>"></div>
 			</a>
+
 		</li>
 	</ul>
 	<div id="app-settings">

@@ -245,8 +245,11 @@ class ViewController extends Controller {
 		$nav->assign('total_space', $totalSpace);
 		$nav->assign('quota', $storageInfo['quota']);
 		$nav->assign('usage_relative', $storageInfo['relative']);
+		$nav->assign('teeeest', $storageInfo);
 		//Todo implement proper way
-		$nav->assign('usage_blocked', 25);
+		$usageBlocked=$storageInfo['quota']-($storageInfo['free']+$storageInfo['used']);
+		$nav->assign('usage_blocked', $usageBlocked);
+		$nav->assign('usage_blocked_relative',round(($usageBlocked/$storageInfo['quota'])*100, 1));
 
 		$contentItems = [];
 
