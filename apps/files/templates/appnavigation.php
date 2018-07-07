@@ -28,7 +28,6 @@
 					} ?></p>
 				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="<?php p($_['usage_blocked_relative']) ?>"></div>
 			</a>
-
 		</li>
 	</ul>
 	<div id="app-settings">
