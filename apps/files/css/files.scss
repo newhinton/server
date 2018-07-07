@@ -784,9 +784,6 @@ table.dragshadow td.size {
 }
 
 #progress {
-  border: none;
-  border-radius: 0;
-  background-color: transparent;
   height: 5px;
 
   .progress-states {
@@ -794,7 +791,7 @@ table.dragshadow td.size {
     vertical-align: top;
     height: 5px;
     border-radius: $border-radius;
-    position:relative;
+    position: relative;
   }
   .progress-used {
     @extend .progress-states;
@@ -821,4 +818,3 @@ table.dragshadow td.size {
     background-size: 23px 30px;
   }
 }
-
