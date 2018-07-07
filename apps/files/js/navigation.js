@@ -434,13 +434,21 @@
 					percentUnavailable = +percentUnavailable - (+overflow - 100);
 				}
 
-
 				var widthUnusedAfterUnavailable = 100.00 - percentUnavailable;
 				var widthUnused = widthUnusedAfterUnavailable - widthUsed;
 
 				$('#progress-used').css("width", widthUsed+"%");
-				$('#progress-unused').css("width", widthUnused+"%");
 				$('#progress-blocked').css("width", percentUnavailable+"%");
+
+				var progressUnusedSelector=$('#progress-unused');
+				progressUnusedSelector.css("width", widthUnused+"%");
+				if(widthUsed>0){
+					progressUnusedSelector.css("margin-left", -2);
+				}
+				if(widthUsed>0){
+					progressUnusedSelector.css("margin-right", -2);
+				}
+				progressUnusedSelector.css("width", widthUnused+"%");
 
 			});
 

@@ -794,17 +794,21 @@ table.dragshadow td.size {
     vertical-align: top;
     height: 5px;
     border-radius: $border-radius;
+    position:relative;
   }
   .progress-used {
     @extend .progress-states;
+    z-index: 3;
     background-color: $color-primary;
   }
   .progress-unused {
     @extend .progress-states;
+    z-index: 1;
     background-color: #e6e6e6;
   }
   .progress-blocked {
     @extend .progress-states;
+    z-index: 2;
     $color-stripe-light: #b8b8b8;
     $color-stripe-dark: #767676;
     background-image: linear-gradient(
