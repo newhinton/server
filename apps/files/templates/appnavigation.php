@@ -17,15 +17,11 @@
 			<a href="#" class="icon-quota svg">
 				<p id="quotatext"><?php
 					if ($_['quota'] !== \OCP\Files\FileInfo::SPACE_UNLIMITED) {
-						p($l->t('%s of %s used', [$_['usage'], $_['total_space']]));
+						p($l->t('%s of %s', [$_['usage'], $_['total_space']]));
 					} else {
 						p($l->t('%s used', [$_['usage']]));
 					} ?></p>
-				<div class="quota-container">
-					<progress value="<?php p($_['usage_relative']); ?>"
-							  max="100"
-						<?php if ($_['usage_relative'] > 80): ?> class="warn" <?php endif; ?>></progress>
-				</div>
+				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="0"></div>
 			</a>
 		</li>
 	</ul>

@@ -67,6 +67,10 @@
 			this.$currentContent = null;
 			this._setupEvents();
 
+			this.setQuotaListener(true);
+
+
+
 			var scope = this;
 			$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/get/SortingStrategy"), function (data, status) {
 				scope.$sortingStrategy = data;
@@ -332,8 +336,6 @@
 			if (sort) {
 				this.QuickSort(list, 0, list.length - 1);
 			}
-
-
 		},
 
 		/**
@@ -416,7 +418,35 @@
 			for (var i = 0; i < len / 2; i++) {
 				this.swap(list, i, len - i);
 			}
+		},
+
+
+		setQuotaListener: function (trigger) {
+			//https://stackoverflow.com/questions/50216876/multiple-colors-on-progress-bar-with-css-or-jquery-based-on-width-percentage
+
+			var progressbar = $('#progress');
+			progressbar.change("change", function () {
+
+				progressbar.empty();
+
+				var percentUnavailable = progressbar.attr('unavailable');
+				var widthUsed = progressbar.attr('value');
+				var widthUnusedAfterUnavailable = 100.00 - percentUnavailable;
+				var widthUnused = widthUnusedAfterUnavailable - widthUsed;
+				var widthBlocked = percentUnavailable;
+
+
+				progressbar.append('<div class="progress-used" style="width:' + widthUsed + '%;"/>');
+				progressbar.append('<div class="progress-unused" style="width:' + widthUnused + '%;"/>');
+				progressbar.append('<div class="progress-blocked" style="width:' + widthBlocked + '%;" />');
+			});
+
+			if(trigger){
+				progressbar.trigger('change');
+			}
 		}
+
+
 
 	};
 
