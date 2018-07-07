@@ -70,7 +70,6 @@
 			this.setQuotaListener(true);
 
 
-
 			var scope = this;
 			$.get(OC.generateUrl("/apps/files/api/v1/quickaccess/get/SortingStrategy"), function (data, status) {
 				scope.$sortingStrategy = data;
@@ -422,8 +421,6 @@
 
 
 		setQuotaListener: function (trigger) {
-			//https://stackoverflow.com/questions/50216876/multiple-colors-on-progress-bar-with-css-or-jquery-based-on-width-percentage
-
 			var progressbar = $('#progress');
 			progressbar.change("change", function () {
 
@@ -431,21 +428,36 @@
 
 				var percentUnavailable = progressbar.attr('unavailable');
 				var widthUsed = progressbar.attr('value');
+
+				var overflow = (+percentUnavailable + +widthUsed);
+				if (overflow > 100) {
+					percentUnavailable = +percentUnavailable - (+overflow - 100);
+				}
+
+
 				var widthUnusedAfterUnavailable = 100.00 - percentUnavailable;
 				var widthUnused = widthUnusedAfterUnavailable - widthUsed;
-				var widthBlocked = percentUnavailable;
 
 
-				progressbar.append('<div class="progress-used" style="width:' + widthUsed + '%;"/>');
-				progressbar.append('<div class="progress-unused" style="width:' + widthUnused + '%;"/>');
-				progressbar.append('<div class="progress-blocked" style="width:' + widthBlocked + '%;" />');
+				var progressUsedElem = document.createElement('div');
+				progressUsedElem.setAttribute("class", "progress-used");
+				progressUsedElem.setAttribute("style", "width:" + widthUsed + "%;");
+
+				var progressUnusedElem = document.createElement('div');
+				progressUnusedElem.setAttribute("class", "progress-unused");
+				progressUnusedElem.setAttribute("style", "width:" + widthUnused + "%;");
+
+				var progressBlockedElem = document.createElement('div');
+				progressBlockedElem.setAttribute("class", "progress-blocked");
+				progressBlockedElem.setAttribute("style", "width:" + percentUnavailable + "%;");
+
+				progressbar.append(progressUsedElem, progressUnusedElem, progressBlockedElem);
 			});
 
-			if(trigger){
+			if (trigger) {
 				progressbar.trigger('change');
 			}
 		}
-
 
 
 	};
