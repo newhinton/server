@@ -12,21 +12,23 @@
 		<li id="quota"
 			class="pinned <?php p($pinned === 0 ? 'first-pinned ' : '') ?><?php
 			if ($_['quota'] !== \OCP\Files\FileInfo::SPACE_UNLIMITED) {
-			?>has-tooltip" title="<?php p($_['usage_relative'] . '%');
-		} ?>">
+			?>has-tooltip" title="<?php
+		p($_['usage_relative'] . '%');
+		if($_['usage_blocked_relative'] > 0){
+			p($l->t(' used.  %s%% are blocked!', $_['usage_blocked_relative']));
+		}
+		}
+		?>">
 			<a href="#" class="icon-quota svg">
 				<p id="quotatext"><?php
 					if ($_['quota'] !== \OCP\Files\FileInfo::SPACE_UNLIMITED) {
-						if($_['usage_blocked_relative'] > 0){
-							p($l->t('%s of %s. %s%% are blocked!', [$_['usage'], $_['total_space'], $_['usage_blocked_relative']]));
-						}else{
-							p($l->t('%s of %s', [$_['usage'], $_['total_space']]));
-						}
-
+						p($l->t('%s of %s', [$_['usage'], $_['total_space']]));
 					} else {
 						p($l->t('%s used', [$_['usage']]));
 					} ?></p>
-				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="<?php p($_['usage_blocked_relative']) ?>"></div>
+				<div id="progress" value="<?php p($_['usage_relative']) ?>" unavailable="<?php p($_['usage_blocked_relative']) ?>">
+					<div id="progress-used" class="progress-used"></div><div id="progress-unused" class="progress-unused" style="width:100%;"></div><div id="progress-blocked" class="progress-blocked"></div>
+				</div>
 			</a>
 		</li>
 	</ul>

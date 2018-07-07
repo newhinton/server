@@ -424,7 +424,7 @@
 			var progressbar = $('#progress');
 			progressbar.change("change", function () {
 
-				progressbar.empty();
+				//progressbar.empty();
 
 				var percentUnavailable = progressbar.attr('unavailable');
 				var widthUsed = progressbar.attr('value');
@@ -438,20 +438,10 @@
 				var widthUnusedAfterUnavailable = 100.00 - percentUnavailable;
 				var widthUnused = widthUnusedAfterUnavailable - widthUsed;
 
+				$('#progress-used').css("width", widthUsed+"%");
+				$('#progress-unused').css("width", widthUnused+"%");
+				$('#progress-blocked').css("width", percentUnavailable+"%");
 
-				var progressUsedElem = document.createElement('div');
-				progressUsedElem.setAttribute("class", "progress-used");
-				progressUsedElem.setAttribute("style", "width:" + widthUsed + "%;");
-
-				var progressUnusedElem = document.createElement('div');
-				progressUnusedElem.setAttribute("class", "progress-unused");
-				progressUnusedElem.setAttribute("style", "width:" + widthUnused + "%;");
-
-				var progressBlockedElem = document.createElement('div');
-				progressBlockedElem.setAttribute("class", "progress-blocked");
-				progressBlockedElem.setAttribute("style", "width:" + percentUnavailable + "%;");
-
-				progressbar.append(progressUsedElem, progressUnusedElem, progressBlockedElem);
 			});
 
 			if (trigger) {
