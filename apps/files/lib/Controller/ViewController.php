@@ -245,6 +245,8 @@ class ViewController extends Controller {
 		$nav->assign('total_space', $totalSpace);
 		$nav->assign('quota', $storageInfo['quota']);
 		$nav->assign('usage_relative', $storageInfo['relative']);
+		//Todo implement proper way
+		$nav->assign('usage_blocked', 25);
 
 		$contentItems = [];
 
